@@ -19,14 +19,30 @@ const newArrayItem = (data) => {
 }
 const newUser = (req, res) => {
     const newData = req.params;
-    const matchedEmail = matchEmail(newData.email);
+    // const matchedEmail = matchEmail(newData.email);
     newArrayItem(newData);
     send (res, 200, Users)
 }
 
 const matchEmail = async (questioned) => {
-    const result = await Users.filter((user)=> user.email == questioned.email)
-    return result
+    // const result = await Users.filter((User)=> User.email == questioned.email)
+    let result = {}
+    const index =0;
+    for(let i =0; i > Users.length; i++){
+        if(questioned == Users[i].email){
+            index = i;
+        }
+    }
+    result = Users[index];
+    const final = {
+        "firstName": result.firstName,
+        "lastName": result.lastName,
+        "email": result.email,
+        "phone": result.phone,
+        "age": result.age,
+        "password": result.password 
+    }
+    return final
   }
 
 const userEmail = async (req, res) => {
@@ -38,7 +54,9 @@ const userEmail = async (req, res) => {
 const updatePasswordByEmail = async (req, res) => {
     const desiredEmail = req.params.email;
     const newPassword = req.params.password;
-    let foundEmail = await matchEmail(desiredEmail)
+    let foundEmail = {};
+    foundEmail = await matchEmail(desiredEmail);
+    console.log(foundEmail);
     foundEmail.password = newPassword;
     send(res, 200, foundEmail)
 }
